@@ -8,9 +8,10 @@
   register: k8s_auth_results
   when: (ocp_token is not defined or ocp_token == "")
 
-- name: OCP | ServiceMeshMemberRolls | Set the OCP API token value
+- name: OCP | ServiceMeshMemberRolls | Set the OCP API token value and rescue_retries control variable
   set_fact:  
     token: "{% if ocp_token is defined and ocp_token != '' %}{{ ocp_token }} {% else %}{{ k8s_auth_results.k8s_auth.api_key }}{% endif %}"
+    rescue_retries: 0
   no_log: true
 
 - name: OCP | ServiceMeshMemberRolls | Try update SMMR until success
